@@ -6,7 +6,6 @@ type TimetableField struct {
 	ToStation   string
 	FromTime    string
 	ToTime      string
-	WaitingTime string
 	ElapsedTime int64
 	Cost        float64
 }

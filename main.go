@@ -102,7 +102,8 @@ func resultMessages(bestPaths []Path, filter string) {
 			for j := range bestPaths[i].Stations {
 				station := bestPaths[i].Stations[j]
 				fmt.Println(station.Train, ":", station.FromStation, "->", station.ToStation,
-					"Time:", station.FromTime, station.ToTime, "=", station.ElapsedTime, "minutes, price:", station.Cost)
+					"Time:", station.FromTime, station.ToTime,
+					"=", station.ElapsedTime, "minutes, price:", station.Cost)
 			}
 		}
 	}

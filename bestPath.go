@@ -66,6 +66,13 @@ func CalculatePathTime(path []TimetableField) (pathTime int64, err error) {
 			return pathTime, err
 		}
 		pathTime += time
+		if i > 0 {
+			waitingTime, err := ParseTimeToMinutes(path[i-1].ToTime, path[i].FromTime)
+			if err != nil {
+				return pathTime, err
+			}
+			pathTime += waitingTime
+		}
 	}
 	return
 }
