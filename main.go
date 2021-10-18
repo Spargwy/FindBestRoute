@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -15,13 +14,14 @@ func main() {
 	filter := args[1]
 	timetable, err := ParseCSVFile()
 	if err != nil {
-		log.Println("Cant parse csv file: ", err)
+		log.Fatal("Cant parse csv file: ", err)
 	}
+	fmt.Println("\nCalculating...")
 	findBestPathAndPrintIt(timetable, filter)
 
 }
 
-func findBestPathAndPrintIt(timetable []TimetableField, filter string) {
+func findBestPathAndPrintIt(timetable []TimetableField, filter string) error {
 	var path Path
 	var result []Path
 	graph, uniqueStations := setGraphAndUniqueStations(timetable)
@@ -30,12 +30,15 @@ func findBestPathAndPrintIt(timetable []TimetableField, filter string) {
 			findAllPaths(graph, graph[uniqueStations[i]][j], path, &result)
 		}
 	}
+	fmt.Printf("Total %d routes\n\n", len(result))
 	bestPaths, err := CalculateBestPath(result, filter)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
 	resultMessages(bestPaths, filter)
 
+	return nil
 }
 
 func setGraphAndUniqueStations(timetable []TimetableField) (graph map[string][]TimetableField, uniqueStations []string) {
@@ -62,26 +65,6 @@ func findAllPaths(graph map[string][]TimetableField, fromStation TimetableField,
 	if len(path.Stations) == len(graph)-1 {
 		*result = append(*result, path)
 	}
-}
-
-func ParseCSVFile() (timetable []TimetableField, err error) {
-	file, err := os.Open("data.csv")
-	if err != nil {
-		log.Println("Cant open csv file: ", err)
-	}
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		return timetable, err
-	}
-	for i := range records {
-		timetableField, err := ParseTimetableField(records[i][0])
-		if err != nil {
-			return timetable, err
-		}
-		timetable = append(timetable, timetableField)
-	}
-	return timetable, nil
 }
 
 func resultMessages(bestPaths []Path, filter string) {

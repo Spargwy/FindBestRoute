@@ -1,9 +1,32 @@
 package main
 
 import (
+	"encoding/csv"
+	"log"
+	"os"
 	"strconv"
 	"strings"
 )
+
+func ParseCSVFile() (timetable []TimetableField, err error) {
+	file, err := os.Open("data.csv")
+	if err != nil {
+		log.Println("Cant open csv file: ", err)
+	}
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return timetable, err
+	}
+	for i := range records {
+		timetableField, err := ParseTimetableField(records[i][0])
+		if err != nil {
+			return timetable, err
+		}
+		timetable = append(timetable, timetableField)
+	}
+	return timetable, nil
+}
 
 func ParseTimetableField(timetableString string) (timeTableField TimetableField, err error) {
 	timetableString = strings.ReplaceAll(timetableString, " ", "")
