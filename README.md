@@ -12,9 +12,9 @@ go build
 ```
 And then 
 ```
-./DistributedLab time
+./findBestRoute time
 
 or
 
-./DistributedLab price
+./findBestRoute price
 ```

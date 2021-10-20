@@ -30,7 +30,6 @@ func findBestPathAndPrintIt(timetable []TimetableField, filter string) error {
 			findAllPaths(graph, graph[uniqueStations[i]][j], path, &result)
 		}
 	}
-	fmt.Printf("Total %d routes\n\n", len(result))
 	bestPaths, err := CalculateBestPath(result, filter)
 	if err != nil {
 		log.Println(err)
